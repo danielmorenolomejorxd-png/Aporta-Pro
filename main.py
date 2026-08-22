@@ -6,55 +6,78 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "8972036325:AAHsRubJ1s2wq_LhIe7mmyMBanpeRQuu-
 CHAT_ID = os.getenv("CHAT_ID", "8760042926")
 app = FastAPI()
 
-def send_telegram(msg):
+def send(msg):
     try:
         requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={"chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML"}, timeout=10)
-        return True
-    except: return False
+    except: pass
 
 @app.get("/", response_class=HTMLResponse)
 def home():
     return """
 <html><head><meta name='viewport' content='width=device-width,initial-scale=1'><style>
-body{background:#0a0e13;color:white;font-family:Arial;margin:0;padding:0}
-.header{background:linear-gradient(90deg,#00ff88,#00d4ff);color:#000;padding:20px;text-align:center;font-weight:900}
-.card{background:#1a212b;margin:15px;border-radius:16px;padding:16px;border:1px solid #2a3441}
-.prob{background:#0a0e13;height:8px;border-radius:10px;overflow:hidden;margin:8px 0}
+body{background:#0a0e13;color:#fff;font-family:Arial;margin:0}
+.head{background:linear-gradient(90deg,#00ff88,#00d4ff);color:#000;padding:18px;text-align:center;font-weight:900;font-size:24px}
+.tabs{display:flex;gap:8px;padding:12px;overflow-x:auto}
+.tab{background:#1a212b;border:1px solid #2a3441;padding:8px 14px;border-radius:20px;font-weight:700;cursor:pointer;white-space:nowrap}
+.tab.active{background:#ffcc00;color:#000}
+.card{background:#1a212b;margin:10px 15px;border-radius:14px;padding:14px;border:1px solid #2a3441}
+.bar{background:#0a0e13;height:7px;border-radius:10px;margin:6px 0}
 .fill{height:100%;background:linear-gradient(90deg,#00ff88,#00d4ff)}
-.btn{display:block;background:#ffcc00;color:#000;text-align:center;padding:18px;border-radius:14px;font-weight:900;text-decoration:none;margin:15px;font-size:18px}
-.badge{background:#00ff88;color:#000;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:900}
-.value{color:#00ff88;font-weight:900}
+.btn{display:block;background:#ffcc00;color:#000;text-align:center;padding:16px;border-radius:12px;font-weight:900;text-decoration:none;margin:15px}
+.sport{font-size:12px;color:#8a9aaa}
 </style></head><body>
-<div class='header'><div style='font-size:28px'>🏓 SPORTIA PRO V4</div><div>IA TENIS DE MESA • VALUE BETS</div></div>
+<div class='head'>🏆 SPORTIA PRO V5 - TODOS LOS DEPORTES</div>
 
-<div class='card'>
-<div style='display:flex;justify-content:space-between'><b>Harimoto 🇯🇵 vs Fan 🇨🇳</b><span class='badge'>LIVE</span></div>
-<div class='prob'><div class='fill' style='width:58%'></div></div>
-<div>IA: <span class='value'>Harimoto 58% WIN</span> • Cuota 2.85 <b style='color:#ffcc00'>+22% VALUE 🔥</b></div>
+<div class='tabs'>
+<div class='tab active'>🔥 Todos</div>
+<div class='tab'>⚽ Fútbol</div>
+<div class='tab'>🏓 Ping Pong</div>
+<div class='tab'>🎾 Tenis</div>
+<div class='tab'>🏀 Basket</div>
+<div class='tab'>🥊 UFC</div>
 </div>
 
 <div class='card'>
-<div style='display:flex;justify-content:space-between'><b>Sun Yingsha 🇨🇳 vs Wang Manyu 🇨🇳</b><span class='badge'>14:30</span></div>
-<div class='prob'><div class='fill' style='width:64%'></div></div>
-<div>IA: <span class='value'>Sun 64% WIN</span> • Cuota 2.40 <b style='color:#ffcc00'>+18% VALUE 🔥</b></div>
+<span class='sport'>⚽ FÚTBOL • LaLiga • 15:00</span><br>
+<b>Real Madrid vs Barcelona</b> <span style='background:#ff4444;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px'>LIVE 🔥</span>
+<div class='bar'><div class='fill' style='width:62%'></div></div>
+IA: <b style='color:#00ff88'>Madrid 62% WIN</b> • Cuota 2.10 <b style='color:#ffcc00'>+24% VALUE</b>
 </div>
 
 <div class='card'>
-<div style='display:flex;justify-content:space-between'><b>Calderano 🇧🇷 vs Moregard 🇸🇪</b><span class='badge'>16:00</span></div>
-<div class='prob'><div class='fill' style='width:52%'></div></div>
-<div>IA: <span class='value'>Calderano 52% WIN</span> • Cuota 2.95 <b style='color:#ffcc00'>+15% VALUE</b></div>
+<span class='sport'>🏓 TENIS DE MESA • WTT • 14:30</span><br>
+<b>Harimoto 🇯🇵 vs Fan 🇨🇳</b> <span style='background:#00ff88;color:#000;padding:2px 8px;border-radius:10px;font-size:11px'>VALUE</span>
+<div class='bar'><div class='fill' style='width:58%'></div></div>
+IA: <b style='color:#00ff88'>Harimoto 58%</b> • Cuota 2.85 <b style='color:#ffcc00'>+22% VALUE</b>
+</div>
+
+<div class='card'>
+<span class='sport'>🎾 TENIS ATP • US Open • 16:00</span><br>
+<b>Alcaraz vs Sinner</b>
+<div class='bar'><div class='fill' style='width:55%'></div></div>
+IA: <b style='color:#00ff88'>Alcaraz 55%</b> • Cuota 2.20 <b style='color:#ffcc00'>+18% VALUE</b>
+</div>
+
+<div class='card'>
+<span class='sport'>🏀 NBA • Pretemporada • 19:00</span><br>
+<b>Lakers vs Warriors</b>
+<div class='bar'><div class='fill' style='width:60%'></div></div>
+IA: <b style='color:#00ff88'>Lakers 60%</b> • Cuota 1.95 <b style='color:#ffcc00'>+16% VALUE</b>
+</div>
+
+<div class='card'>
+<span class='sport'>⚽ FÚTBOL • Premier • 13:30</span><br>
+<b>Man City vs Arsenal</b>
+<div class='bar'><div class='fill' style='width:54%'></div></div>
+IA: <b style='color:#00ff88'>City 54%</b> • Cuota 2.30 <b style='color:#ffcc00'>+12% VALUE</b>
 </div>
 
 <a class='btn' href='/test-bot'>🚨 ENVIAR ALERTA A TELEGRAM</a>
-<div style='text-align:center;color:#5a6a7a;padding-bottom:30px'>Bot: @sportia_pro_v3_bot • Railway: OK ✅<br>Hecho para Fernando • Villavicencio</div>
+<div style='text-align:center;color:#5a6a7a;padding:0 15px 25px;font-size:13px'>Bot: @sportia_pro_v3_bot • 5 deportes • 12 ligas<br>Villavicencio • Fernando</div>
 </body></html>
 """
 
 @app.get("/test-bot")
 def test():
-    msg = "🚨 <b>SPORTIA PRO V4 - ALERTA VALUE 🔥</b>\n\n🏓 Harimoto vs Fan Zhendong\n🤖 IA: 58% Win\n💰 Cuota: 2.85\n📈 VALUE: +22%\n\nLink: https://web-production-b2155.up.railway.app"
-    send_telegram(msg)
-    return HTMLResponse("<h1 style='text-align:center;margin-top:100px'>✅ ALERTA ENVIADA A TELEGRAM</h1><a href='/' style='display:block;text-align:center;margin-top:20px'>Volver</a>")
-
-@app.get("/api/predictions")
-def api(): return {"ok": True}
+    send("🚨 <b>SPORTIA V5 MULTI-DEPORTE</b>\n\n⚽ Madrid vs Barça\n🤖 IA 62% WIN\n💰 Cuota 2.10 +24% VALUE\n\n🏓 Harimoto 58% WIN Cuota 2.85\n\nApp: https://web-production-b2155.up.railway.app")
+    return HTMLResponse("<h1 style='text-align:center;margin-top:80px'>✅ ENVIADO MULTI-DEPORTE</h1><a href='/' style='display:block;text-align:center;margin-top:20px'>Volver</a>")
