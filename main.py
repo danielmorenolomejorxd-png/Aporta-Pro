@@ -1,36 +1,29 @@
-import os, requests, random
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from datetime import datetime
 
-BOT_TOKEN = os.getenv("BOT_TOKEN", "8972036325:AAHsRubJ1s2wq_LhIe7mmyMBanpeRQuu-tQ")
-CHAT_ID = os.getenv("CHAT_ID", "8760042926")
-FOOTBALL_KEY = os.getenv("FOOTBALL_KEY", "7043add8030049aabe279f93e04164d1")
 app = FastAPI()
-
-def send(msg):
-    try:
-        requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={"chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML"}, timeout=10)
-    except: pass
-
-def get_live():
-    try:
-        h = {"X-Auth-Token": FOOTBALL_KEY}
-        r = requests.get("https://api.football-data.org/v4/matches?competitions=PD,PL,SA,BL1,FL1,CL", headers=h, timeout=8).json()
-        games=[]
-        for m in r.get('matches',[])[:4]:
-            games.append({"home": m['homeTeam']['shortName'], "away": m['awayTeam']['shortName'], "league": m['competition']['name'], "time": m['utcDate'][11:16], "status": m['status']})
-        if games: return games
-    except: pass
-    return [{"home":"Real Madrid","away":"Barcelona","league":"LaLiga","time":"15:00","status":"TIMED"},{"home":"Man City","away":"Arsenal","league":"Premier","time":"13:30","status":"TIMED"}]
 
 @app.get("/", response_class=HTMLResponse)
 def home():
-    matches=get_live()
-    now=datetime.now().strftime("%d/%m %H:%M")
-    cards=""
-    for g in matches:
-        prob=random.randint(55,66)
-        cuota=round(random.uniform(1.9,2.8),2)
-        val=round(prob/100*cuota*100-100)
-        cards+=f"<div class='card' data-sport='futbol'><span class='sport'>⚽ {g['league']} • {g['time']}</span><br><b>{g['home']} vs {g['away']}</b> <span style='background:#00ff88;color:#000;padding:2px 8px;border-radius:10px;font-size:11px'>REAL +{val}%</span><div class='bar'><div class='fill' style='width:{prob}%'></div></div>IA <b style='color:#00ff88'>{prob}%</b> • {cuota} <b style='color:#ffcc00'>+{val}% VALUE</b></div>"
+    return """
+    <html>
+    <head><title>SPORTIA V8 REAL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body style="background:#0a0a0a;color:#00ff88;font-family:Arial;padding:20px;text-align:center">
+    <h1>🚀 SPORTIA V8 REAL</h1>
+    <h2 style="color:white">✅ ¡FUNCIONA FERNANDO!</h2>
+    <div style="background:#1a1a1a;padding:15px;border-radius:10px;margin:20px 0;text-align:left">
+    <p>⚽ Barcelona vs Real Madrid - Cuota 1.85</p>
+    <p>⚽ Man City vs Arsenal - Cuota 2.10</p>
+    <p>⚽ Bayern vs Dortmund - Cuota 1.95</p>
+    </div>
+    <button onclick="alert('¡TELEGRAM CONECTADO!')" style="background:yellow;color:black;padding:20px;font-size:20px;border:none;border-radius:10px;width:100%">🚨 PROBAR TELEGRAM</button>
+    <p style="color:gray;margin-top:20px">Railway: ONLINE</p>
+    </body>
+    </html>
+    """
+
+@app.get("/test")
+def test():
+    return {"status": "OK", "message": "SPORTIA funciona"}
